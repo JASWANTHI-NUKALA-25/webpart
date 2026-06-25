@@ -8,6 +8,7 @@ const MyTasks: React.FC<IMyTasksProps> = () => {
   const [expandedSections, setExpandedSections] = React.useState<string[]>([]);
   const [agentFilter, setAgentFilter] = React.useState<string>('');
   const [keySearch, setKeySearch] = React.useState<string>('');
+  const [navOpen, setNavOpen] = React.useState<boolean>(false);
 
   const toggleSection = (section: string): void => {
     if (expandedSections.indexOf(section) !== -1) {
@@ -174,26 +175,11 @@ const MyTasks: React.FC<IMyTasksProps> = () => {
       {/* Top Header */}
       <div className={styles.appHeader}>
         <div className={styles.logoBlock}>
-          <svg className={styles.logoGear} viewBox="0 0 48 48" width="42" height="42">
-            <circle cx="24" cy="24" r="9" fill="#e07020"/>
-            <circle cx="24" cy="24" r="5" fill="#fff"/>
-            <rect x="22.5" y="5" width="3" height="8" rx="1.5" fill="#e07020"/>
-            <rect x="22.5" y="35" width="3" height="8" rx="1.5" fill="#e07020"/>
-            <rect x="5" y="22.5" width="8" height="3" rx="1.5" fill="#e07020"/>
-            <rect x="35" y="22.5" width="8" height="3" rx="1.5" fill="#e07020"/>
-            <rect x="10.1" y="10.1" width="8" height="3" rx="1.5" transform="rotate(45 10.1 10.1)" fill="#e07020"/>
-            <rect x="32.1" y="34.9" width="8" height="3" rx="1.5" transform="rotate(45 32.1 34.9)" fill="#e07020"/>
-            <rect x="34.9" y="10.1" width="8" height="3" rx="1.5" transform="rotate(-45 34.9 10.1)" fill="#e07020"/>
-            <rect x="10.1" y="34.9" width="8" height="3" rx="1.5" transform="rotate(-45 10.1 34.9)" fill="#e07020"/>
-          </svg>
-          <div className={styles.logoText}>
-            <div className={styles.logoName}>
-              <span className={styles.logoCentro}>CENTRO</span>
-              <span className={styles.logoMotion}>MOTION</span>
-              <sup className={styles.logoTm}>®</sup>
-            </div>
-            <div className={styles.logoTagline}>Advancing Actuation and Control Solutions</div>
-          </div>
+          <img
+            src={require('../assets/centromotion-logo.png')}
+            alt="CentroMotion"
+            className={styles.logoImg}
+          />
         </div>
 
         <div className={styles.headerTitle}>
@@ -201,6 +187,11 @@ const MyTasks: React.FC<IMyTasksProps> = () => {
         </div>
 
         <div className={styles.headerActions}>
+          <button className={styles.hamburgerBtn} onClick={() => setNavOpen(!navOpen)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+          </button>
           <span className={styles.headerActionBtn}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
               <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
@@ -224,13 +215,14 @@ const MyTasks: React.FC<IMyTasksProps> = () => {
       <div className={styles.headerAccentLine} />
 
       <div className={styles.bodyLayout}>
+        {navOpen && <div className={styles.navOverlay} onClick={() => setNavOpen(false)} />}
         {/* Left Navigation */}
-        <nav className={styles.leftNav}>
+        <nav className={`${styles.leftNav} ${navOpen ? styles.leftNavOpen : ''}`}>
           {topNavItems.map((item) => (
             <div
               key={item.id}
               className={`${styles.navItem} ${activeNav === item.id ? styles.navItemActive : ''}`}
-              onClick={() => setActiveNav(item.id)}
+              onClick={() => { setActiveNav(item.id); setNavOpen(false); }}
             >
               <span className={styles.navIcon}>{item.icon}</span>
               <span className={styles.navLabel}>{item.label}</span>
@@ -259,7 +251,7 @@ const MyTasks: React.FC<IMyTasksProps> = () => {
                     <div
                       key={child}
                       className={`${styles.navSubItem} ${activeNav === `${section.id}_${child}` ? styles.navSubItemActive : ''}`}
-                      onClick={() => setActiveNav(`${section.id}_${child}`)}
+                      onClick={() => { setActiveNav(`${section.id}_${child}`); setNavOpen(false); }}
                     >
                       {child}
                     </div>
