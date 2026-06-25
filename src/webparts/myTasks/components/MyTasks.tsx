@@ -10,7 +10,7 @@ const MyTasks: React.FC<IMyTasksProps> = () => {
   const [keySearch, setKeySearch] = React.useState<string>('');
 
   const toggleSection = (section: string): void => {
-    if (expandedSections.includes(section)) {
+    if (expandedSections.indexOf(section) !== -1) {
       setExpandedSections(expandedSections.filter((s: string) => s !== section));
     } else {
       setExpandedSections([...expandedSections, section]);
@@ -156,7 +156,7 @@ const MyTasks: React.FC<IMyTasksProps> = () => {
             value={agentFilter}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setAgentFilter(e.target.value)}
           >
-            <option value=""></option>
+            <option value="" />
           </select>
         </div>
         <div className={styles.filterGroup}>
@@ -246,14 +246,14 @@ const MyTasks: React.FC<IMyTasksProps> = () => {
                 <span className={styles.navIcon}>{section.icon}</span>
                 <span className={styles.navLabel}>{section.label}</span>
                 <span className={styles.navChevron}>
-                  {expandedSections.includes(section.id) ? (
+                  {expandedSections.indexOf(section.id) !== -1 ? (
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14l5-5 5 5z"/></svg>
                   ) : (
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
                   )}
                 </span>
               </div>
-              {expandedSections.includes(section.id) && (
+              {expandedSections.indexOf(section.id) !== -1 && (
                 <div className={styles.navSubItems}>
                   {section.children.map((child: string) => (
                     <div
